@@ -7,10 +7,10 @@ import processing.serial.*;
 /* SETTINGS BEGIN */
 
 // Serial port to connect to
-String serialPortName = "/dev/tty.usbmodem1411";
+String serialPortName = "/dev/ttyACM0";
 
 // If you want to debug the plotter without using a real serial port set this to true
-boolean mockupSerial = true;
+boolean mockupSerial = false;
 // If you wish to display the variables in the form of a BarChart, set this to true
 boolean showBarChart = false;
 
@@ -64,7 +64,7 @@ void setup() {
   cp5 = new ControlP5(this);
   
   // extra control panel frame
-  cf = addControlFrame("Robot Tuner", 500, 650);
+  cf = addControlFrame("Motor Tuner", 300, 400);
   
   // init charts
   setChartSettings();
@@ -159,7 +159,7 @@ void draw() {
     String myString = "";
     if (!mockupSerial) {
       try {
-        serialPort.readBytesUntil('\r', inBuffer);
+        serialPort.readBytesUntil('\n', inBuffer);
       }
       catch (Exception e) {
       }
