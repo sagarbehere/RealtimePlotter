@@ -127,7 +127,7 @@ public class ControlFrame extends PApplet {
         serialPort.write("set "+parameter+" "+value+"\n");
         serialPort.clear();
       }
-      print("set "+parameter+" "+value+";\n");
+      //print("set "+parameter+" "+value+"\n");
       /*for (int i=0; i<inBuffer.length; i++) {
        inBuffer[i] = 0;  
        }*/

@@ -28,6 +28,9 @@ JSONObject plotterConfigJSON;
 Graph BarChart;
 Graph LineGraph;
 
+PrintWriter output;
+DisposeHandler dh;
+
 float[] barChartValues = new float[6];
 float[][] lineGraphValues = new float[6][100];
 float[] lineGraphSampleNumbers = new float[100];
@@ -59,6 +62,10 @@ void setup() {
   // settings save file
   topSketchPath = sketchPath;
   plotterConfigJSON = loadJSONObject(topSketchPath+"/plotter_config.json");
+
+  //log received serial data to file
+  output = createWriter("log.txt");
+  dh = new DisposeHandler(this);
 
   // gui
   cp5 = new ControlP5(this);
@@ -169,10 +176,15 @@ void draw() {
       myString = mockupSerialFunction();
     }
 
-    //println(myString);
-
+    print(myString);
+    print("\n");
+    output.print(myString);
+    
     // split the string at delimiter (space)
     String[] nums = split(myString, ' ');
+    if (nums.length == 6) {
+          //output.print(myString);
+    }
     
     // count number of bars and line graphs to hide
     int numberOfInvisibleBars = 0;
@@ -285,3 +297,29 @@ String getPlotterConfigString(String id) {
   return r;
 }
 
+public class DisposeHandler {
+   
+  DisposeHandler(PApplet pa)
+  {
+    pa.registerMethod("dispose", this);
+  }
+   
+  public void dispose()
+  {
+    output.flush();
+    output.close();
+    print("Closing sketch");
+    // Place here the code you want to execute on exit
+  }
+}
+
+void keyPressed(){
+  if (key == ESC) {
+    stop();
+  }
+}
+
+void stop(){
+  println("closing from stop()");
+  super.stop();
+}
